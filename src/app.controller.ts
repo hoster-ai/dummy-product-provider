@@ -34,7 +34,7 @@ import { ApiExceptionFilter } from './exception.filter';
 @UseFilters(new ApiExceptionFilter())
 @UseGuards(AuthGuard('bearer'))
 @ApiBearerAuth()
-@ApiUnauthorizedResponse({ status: 401, description: 'Unauthorized' })
+@ApiUnauthorizedResponse({ description: 'Unauthorized' })
 export class AppController {
   constructor(private readonly service: AppService) {}
 
