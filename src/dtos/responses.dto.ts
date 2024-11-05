@@ -1,32 +1,56 @@
-import { ApiResponseProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiResponseProperty } from '@nestjs/swagger';
 import { ActionFieldDto } from './action-field.dto';
 import { MetaDto } from './meta.response.dto';
 import { ProviderInfoDto } from './provider-info.response.dto';
 
 class BaseResponse {
+  /**
+   * Response code
+   */
   @ApiResponseProperty({
     type: Number,
     example: 200,
   })
+  @ApiProperty({
+    description: 'Response code',
+  })
   code: number;
 
+  /**
+   * Response message
+   */
   @ApiResponseProperty({
     type: String,
     example: 'Ok',
+  })
+  @ApiProperty({
+    description: 'Response message',
   })
   message: string;
 }
 
 export class InfoResponseDto extends BaseResponse {
+  /**
+   * Provider information
+   */
   @ApiResponseProperty({
     type: ProviderInfoDto,
+  })
+  @ApiProperty({
+    description: 'Provider information',
   })
   info: ProviderInfoDto;
 }
 
 export class MetaResponseDto extends BaseResponse {
+  /**
+   * Meta information
+   */
   @ApiResponseProperty({
     example: MetaDto,
+  })
+  @ApiProperty({
+    description: 'Meta information',
   })
   meta?: MetaDto;
 }

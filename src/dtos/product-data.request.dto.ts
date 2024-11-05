@@ -11,27 +11,39 @@ import { DurationEnum } from '../enums/duration.enum';
 import { IpTypeEnum } from '../enums/ip-type.enum';
 
 class IpDto {
+  /**
+   * IP address
+   */
   @IsIP()
   @IsDefined()
   @ApiProperty({
     type: String,
     example: '1.1.1.1',
+    description: 'IP address',
   })
   address: string;
 
+  /**
+   * IP range
+   */
   @IsNumber()
   @IsDefined()
   @ApiProperty({
     type: Number,
     title: 'IP range',
+    description: 'IP range',
   })
   range: number;
 
+  /**
+   * Type of IP
+   */
   @IsEnum(IpTypeEnum)
   @IsDefined()
   @ApiProperty({
     enum: IpTypeEnum,
     example: IpTypeEnum.IPv4,
+    description: 'Type of IP',
   })
   type: IpTypeEnum;
 }

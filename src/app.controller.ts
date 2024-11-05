@@ -51,10 +51,21 @@ export class AppController {
       info: {
         name: '',
         actionFields: this.service.getActionFields(),
-        productTabs: [],
-        listActions: [],
-        settings: [],
-        returnMetaKeys: [],
+        productTabs: [{
+          label: 'Product Tab',
+          url: 'https://www.google.com',
+        }],
+        listActions: [{
+          icon: 'icon',
+          label: 'Admin Panel',
+          link: 'https://www.google.com',
+          popup: 'Admin Panel',
+        }],
+        settings: [{
+          label: 'Settings',
+          url: 'https://www.google.com',
+        }],
+        returnMetaKeys: ['id', 'cpus', 'ram', 'disk', 'os', 'panel'],
       },
     };
   }
