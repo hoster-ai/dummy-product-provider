@@ -7,7 +7,8 @@ export class ActionFieldDto {
    */
   @ApiResponseProperty()
   @ApiProperty({ 
-    description: "ID of action field"
+    description: "ID of action field",
+    type: String,
   })
   id: string;
 
@@ -16,7 +17,8 @@ export class ActionFieldDto {
    */
   @ApiResponseProperty()
   @ApiProperty({ 
-    description: "Label of action field"
+    description: "Label of action field",
+    type: String,
   })
   label: string;
 
@@ -25,7 +27,12 @@ export class ActionFieldDto {
    */
   @ApiResponseProperty()
   @ApiProperty({ 
-    description: "Value of action field"
+    description: "Value of action field",
+    oneOf: [
+      { type: 'number' },
+      { type: 'string' },
+      { type: 'object', additionalProperties: { type: 'string' } },
+    ],
   })
   value: string | number | { [key: string]: string };
 
@@ -34,7 +41,8 @@ export class ActionFieldDto {
    */
   @ApiResponseProperty()
   @ApiProperty({ 
-    description: "Type of label"
+    description: "Type of label",
+    enum: LabelTypeEnum,
   })
   type: LabelTypeEnum;
 
@@ -43,7 +51,8 @@ export class ActionFieldDto {
    */
   @ApiResponseProperty()
   @ApiProperty({ 
-    description: "Indicates if the field is required"
+    description: "Indicates if the field is required",
+    type: Boolean,
   })
   required: boolean;
 
@@ -52,25 +61,28 @@ export class ActionFieldDto {
    */
   @ApiResponseProperty()
   @ApiProperty({ 
-    description: "Indicates if the field is disabled"
+    description: "Indicates if the field is disabled",
+    type: Boolean,
   })
-  disabled = false;
+  disabled: boolean = false;
 
   /**
    * Indicates if the field is hidden
    */
   @ApiResponseProperty()
   @ApiProperty({ 
-    description: "Indicates if the field is hidden"
+    description: "Indicates if the field is hidden",
+    type: Boolean,
   })
-  hidden = false;
+  hidden: boolean = false;
 
   /**
    * Regex validation pattern for the field
    */
   @ApiResponseProperty()
   @ApiProperty({ 
-    description: "Regex validation pattern for the field"
+    description: "Regex validation pattern for the field",
+    type: String,
   })
   regexValidation: string;
 
@@ -79,7 +91,8 @@ export class ActionFieldDto {
    */
   @ApiResponseProperty()
   @ApiProperty({ 
-    description: "Indicates if the field has remote validation"
+    description: "Indicates if the field has remote validation",
+    type: Boolean,
   })
   remoteValidation: boolean;
 
@@ -88,7 +101,8 @@ export class ActionFieldDto {
    */
   @ApiResponseProperty()
   @ApiProperty({ 
-    description: "Error message for the field"
+    description: "Error message for the field",
+    type: String
   })
   error?: string;
 }

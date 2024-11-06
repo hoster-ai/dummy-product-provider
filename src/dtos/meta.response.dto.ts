@@ -7,6 +7,7 @@ export class MetaDto {
   @ApiProperty({
     example: [],
     description: 'Public metadata',
+    type: 'array'
   })
   public: any;
 
@@ -16,6 +17,7 @@ export class MetaDto {
   @ApiProperty({
     example: [],
     description: 'Private metadata',
+    type: 'array'
   })
   private: any;
 }

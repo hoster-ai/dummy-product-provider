@@ -9,7 +9,8 @@ export class ChargeResponseDto {
     example: 1646823311,
   })
   @ApiProperty({
-    description: "Timestamp of the charge response"
+    description: "Timestamp of the charge response",
+    type: "number"
   })
   timestamp: number;
 
@@ -20,7 +21,8 @@ export class ChargeResponseDto {
     example: { cpu: 1, ram: 2 },
   })
   @ApiProperty({
-    description: "Variants of the charge response"
+    description: "Variants of the charge response",
+    type: "object"
   })
   variants: { [key: string]: string | number };
 
@@ -29,7 +31,8 @@ export class ChargeResponseDto {
    */
   @ApiResponseProperty({ type: MetaDto })
   @ApiProperty({
-    description: "Meta information of the charge response"
+    description: "Meta information of the charge response",
+    type: MetaDto
   })
   meta: MetaDto;
 }

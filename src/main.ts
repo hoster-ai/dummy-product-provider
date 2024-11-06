@@ -3,6 +3,7 @@ import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ValidationError } from 'class-validator';
 import { AppModule } from './app.module';
+import { ChargeResponseDto } from './dtos/charge.response.dto';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -17,7 +18,10 @@ async function bootstrap() {
     })
     .build();
 
-  const document = SwaggerModule.createDocument(app, config);
+  const document = SwaggerModule.createDocument(app, config, {
+    // Εδώ προσθέτουμε τα extra μοντέλα που δεν εμφανίζονται στο swagger αυτόματα
+    extraModels: [ChargeResponseDto],
+  });
   SwaggerModule.setup('api', app, document);
 
   app.enableCors();

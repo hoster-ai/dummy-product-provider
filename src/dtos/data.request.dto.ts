@@ -9,7 +9,7 @@ export class RequestDto {
    */
   @IsDefined()
   @IsObject()
-  @ApiProperty({ type: UserDataDto, description: "User data" })
+  @ApiProperty({ type: UserDataDto, description: 'User data' })
   userData: UserDataDto;
 
   /**
@@ -17,6 +17,6 @@ export class RequestDto {
    */
   @IsDefined()
   @IsObject()
-  @ApiProperty({ type: ProductDataDto, description: "Product data" })
+  @ApiProperty({ type: ProductDataDto, description: 'Product data' })
   productData: ProductDataDto;
 }
