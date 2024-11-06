@@ -4,6 +4,9 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ValidationError } from 'class-validator';
 import { AppModule } from './app.module';
 import { ChargeResponseDto } from './dtos/charge.response.dto';
+import { DynamicPriceInfoDto } from './dtos/provider-info.response.dto';
+import { ActionFieldsValidationResponse, ErrorResponseDto, TaskResponseDto } from './dtos/responses.dto';
+import { CountryEnum } from './enums/country.enum';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -20,7 +23,14 @@ async function bootstrap() {
 
   const document = SwaggerModule.createDocument(app, config, {
     // Εδώ προσθέτουμε τα extra μοντέλα που δεν εμφανίζονται στο swagger αυτόματα
-    extraModels: [ChargeResponseDto],
+    extraModels: [
+      ChargeResponseDto,
+      DynamicPriceInfoDto,
+      ErrorResponseDto,
+      ActionFieldsValidationResponse,
+      TaskResponseDto,
+    ],
+    ignoreGlobalPrefix: false,  
   });
   SwaggerModule.setup('api', app, document);
 

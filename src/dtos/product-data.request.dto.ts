@@ -59,10 +59,10 @@ export class ProductDataDto {
 
   @IsDefined()
   @ApiProperty({
-    type: Object,
+    // type: Object,
     title: 'Provider options',
   })
-  options: Record<string, unknown>[];
+  options: Record<string, unknown>;
 
   @IsDefined()
   @ApiProperty({

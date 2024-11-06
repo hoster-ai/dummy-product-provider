@@ -381,7 +381,7 @@ export class AppController {
    * @param requestBody
    * @returns Promise boolean
    */
-  @ApiBody({ type: Object })
+  @ApiBody({ type: "object" })
   @Post('validate/action-fields')
   @ApiOkResponse()
   @HttpCode(200)
@@ -424,7 +424,7 @@ export class AppController {
   @Post('install')
   @ApiOkResponse()
   @HttpCode(200)
-  @ApiBody({ type: Object })
+  @ApiBody({ type: "object" })
   async install(
     @Request() requestBody: any,
   ): Promise<TaskResponseDto | MetaResponseDto> {
@@ -456,7 +456,7 @@ export class AppController {
   @Post('uninstall')
   @ApiOkResponse()
   @HttpCode(200)
-  @ApiBody({ type: Object })
+  @ApiBody({ type: "object" })
   async uninstall(
     @Request() requestBody: any,
   ): Promise<TaskResponseDto | MetaResponseDto> {
