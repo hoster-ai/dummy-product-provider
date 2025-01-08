@@ -1,5 +1,5 @@
 import { ApiProperty, ApiResponseProperty } from '@nestjs/swagger';
-import { ActionFieldDto } from './action-field.dto';
+import { FieldDto } from './action-field.dto';
 import { MetaDto } from './meta.response.dto';
 import { ProviderInfoDto } from './provider-info.response.dto';
 
@@ -64,9 +64,9 @@ export class ErrorResponseDto extends BaseResponse {
 
 export class ActionFieldsValidationResponse extends BaseResponse {
   @ApiResponseProperty({
-    type: [ActionFieldDto],
+    type: [FieldDto],
   })
-  actionFields?: ActionFieldDto[];
+  actionFields?: FieldDto[];
 }
 
 export class TaskResponseDto extends BaseResponse {

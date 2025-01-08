@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional, ApiResponseProperty } from '@nestjs/swagger';
-import { ActionFieldDto as FieldDto } from './action-field.dto';
+import { FieldDto as FieldDto } from './action-field.dto';
 import { LanguageEnum } from 'src/enums/language.enum';
 import { EventsEnum } from 'src/enums/events.enum';
 import { RolesEnum } from 'src/enums/roles.enum';

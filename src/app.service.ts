@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { ActionFieldDto } from './dtos/action-field.dto';
+import { FieldDto } from './dtos/action-field.dto';
 import { LabelTypeEnum } from './enums/label.type.enum';
 
 @Injectable()
 export class AppService {
-  private actionFields: ActionFieldDto[] = [
+  private actionFields: FieldDto[] = [
     {
       id: 'os',
       label: 'OS',
@@ -37,11 +37,11 @@ export class AppService {
     },
   ];
 
-  public getActionFieldById(id: string): ActionFieldDto {
-    return this.actionFields.find((field: ActionFieldDto) => field.id === id);
+  public getActionFieldById(id: string): FieldDto {
+    return this.actionFields.find((field: FieldDto) => field.id === id);
   }
 
-  public getActionFields(): ActionFieldDto[] {
+  public getActionFields(): FieldDto[] {
     return this.actionFields;
   }
 }
