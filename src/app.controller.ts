@@ -436,36 +436,12 @@ export class AppController {
     async validateItemAttributes(
       @Body() requestBody: { [key: string]: string },
     ): Promise<AttributeFieldsValidationResponse> {
-      const osActionField = this.service.getProductAttributesById('os');
-      const panelActionField = this.service.getProductAttributesById('panel');
-  
-      // If os is null, disable panel
-      if (requestBody['os'] === null) {
-        panelActionField.value = null;
-        panelActionField.disabled = true;
-      }
-  
-      // if os is ubuntu, panel values are plesk, cpanel
-      if (requestBody['os'] === 'ubuntu') {
-        panelActionField.value = {
-          plesk: 'Plesk',
-          cpanel: 'cPanel',
-        };
-        panelActionField.disabled = false;
-      }
-  
-      // if os is fedora panel value is plesk
-      if (requestBody['os'] === 'fedora') {
-        panelActionField.value = {
-          plesk: 'Plesk',
-        };
-        panelActionField.disabled = false;
-      }
+      const testAttribute = this.service.getItemAttributesById('test');
   
       return {
         code: 200,
         message: 'Ok',
-        product_attributes: [osActionField, panelActionField],
+        item_attributes: [testAttribute],
       };
     }
 
