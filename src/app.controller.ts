@@ -385,7 +385,7 @@ export class AppController {
    * @returns Promise boolean
    */
   @ApiBody({ type: "object" })
-  @Post('validate/action-fields')
+  @Post('validate/product-attributes')
   @ApiOkResponse()
   @HttpCode(200)
   async validateProductAttributes(
