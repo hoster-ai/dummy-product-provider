@@ -1,13 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { FieldDto } from './dtos/action-field.dto';
+import { FieldDto } from './dtos/field.dto';
 import { LabelTypeEnum } from './enums/label.type.enum';
+import { LanguageEnum } from './enums/language.enum';
 
 @Injectable()
 export class AppService {
-  private actionFields: FieldDto[] = [
+  private productAttributes: FieldDto[] = [
     {
       id: 'os',
-      label: 'OS',
+      label: [{ language: LanguageEnum.EN, text: 'OS' }],
       value: {
         ubuntu: 'Ubuntu',
         fedora: 'Fedora',
@@ -18,11 +19,10 @@ export class AppService {
       hidden: false,
       regexValidation: '',
       remoteValidation: true,
-      error: '',
     },
     {
       id: 'panel',
-      label: 'Panel',
+      label: [{ language: LanguageEnum.EN, text: 'Panel' }],
       value: {
         plesk: 'Plesk',
         cpanel: 'cPanel',
@@ -33,15 +33,38 @@ export class AppService {
       hidden: false,
       regexValidation: '',
       remoteValidation: true,
-      error: '',
     },
   ];
 
-  public getActionFieldById(id: string): FieldDto {
-    return this.actionFields.find((field: FieldDto) => field.id === id);
+  private itemAttributes: FieldDto[] = [
+    {
+      id: 'test',
+      label: [{
+        language: LanguageEnum.EN,
+        text: 'test'
+      }],
+      value: { test: 'test' },
+      type: LabelTypeEnum.TEXT_BOX,
+      required: false,
+      disabled: false,
+      hidden: false
+    },
+  ]
+
+  public getProductAttributesById(id: string): FieldDto {
+    return this.productAttributes.find((field: FieldDto) => field.id === id);
   }
 
-  public getActionFields(): FieldDto[] {
-    return this.actionFields;
+  public getProductAttributes(): FieldDto[] {
+    return this.productAttributes;
+  }
+
+
+  public getItemAttributesById(id: string): FieldDto {
+    return this.itemAttributes.find((field: FieldDto) => field.id === id);
+  }
+
+  public getItemAttributes(): FieldDto[] {
+    return this.itemAttributes;
   }
 }

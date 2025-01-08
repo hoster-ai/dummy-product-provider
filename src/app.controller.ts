@@ -24,7 +24,7 @@ import {
   MetaResponseDto,
   BooleanResponseDto,
   InfoResponseDto,
-  ActionFieldsValidationResponse,
+  AttributeFieldsValidationResponse,
   TaskResponseDto,
 } from './dtos/responses.dto';
 import { ApiExceptionFilter } from './exception.filter';
@@ -51,7 +51,7 @@ export class AppController {
       message: 'Ok',
       info: {
         name: 'Dummy Product Integration',
-        product_attributes: this.service.getActionFields(),
+        product_attributes: this.service.getProductAttributes(),
         productTabs: [{
           label: 'Product Tab',
           url: 'https://www.google.com',
@@ -388,11 +388,11 @@ export class AppController {
   @Post('validate/action-fields')
   @ApiOkResponse()
   @HttpCode(200)
-  async validateActionFields(
+  async validateProductAttributes(
     @Body() requestBody: { [key: string]: string },
-  ): Promise<ActionFieldsValidationResponse> {
-    const osActionField = this.service.getActionFieldById('os');
-    const panelActionField = this.service.getActionFieldById('panel');
+  ): Promise<AttributeFieldsValidationResponse> {
+    const osActionField = this.service.getProductAttributesById('os');
+    const panelActionField = this.service.getProductAttributesById('panel');
 
     // If os is null, disable panel
     if (requestBody['os'] === null) {
@@ -420,9 +420,54 @@ export class AppController {
     return {
       code: 200,
       message: 'Ok',
-      actionFields: [osActionField, panelActionField],
+      product_attributes: [osActionField, panelActionField],
     };
   }
+
+    /**
+   *
+   * @param requestBody
+   * @returns Promise boolean
+   */
+    @ApiBody({ type: "object" })
+    @Post('validate/item-attributes')
+    @ApiOkResponse()
+    @HttpCode(200)
+    async validateItemAttributes(
+      @Body() requestBody: { [key: string]: string },
+    ): Promise<AttributeFieldsValidationResponse> {
+      const osActionField = this.service.getProductAttributesById('os');
+      const panelActionField = this.service.getProductAttributesById('panel');
+  
+      // If os is null, disable panel
+      if (requestBody['os'] === null) {
+        panelActionField.value = null;
+        panelActionField.disabled = true;
+      }
+  
+      // if os is ubuntu, panel values are plesk, cpanel
+      if (requestBody['os'] === 'ubuntu') {
+        panelActionField.value = {
+          plesk: 'Plesk',
+          cpanel: 'cPanel',
+        };
+        panelActionField.disabled = false;
+      }
+  
+      // if os is fedora panel value is plesk
+      if (requestBody['os'] === 'fedora') {
+        panelActionField.value = {
+          plesk: 'Plesk',
+        };
+        panelActionField.disabled = false;
+      }
+  
+      return {
+        code: 200,
+        message: 'Ok',
+        product_attributes: [osActionField, panelActionField],
+      };
+    }
 
   @Post('install')
   @ApiOkResponse()

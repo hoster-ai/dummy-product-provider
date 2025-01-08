@@ -5,7 +5,7 @@ import { ValidationError } from 'class-validator';
 import { AppModule } from './app.module';
 import { ChargeResponseDto } from './dtos/charge.response.dto';
 import { DynamicPriceInfoDto } from './dtos/provider-info.response.dto';
-import { ActionFieldsValidationResponse, ErrorResponseDto, TaskResponseDto } from './dtos/responses.dto';
+import { AttributeFieldsValidationResponse, ErrorResponseDto, TaskResponseDto } from './dtos/responses.dto';
 import { CountryEnum } from './enums/country.enum';
 
 async function bootstrap() {
@@ -27,7 +27,7 @@ async function bootstrap() {
       ChargeResponseDto,
       DynamicPriceInfoDto,
       ErrorResponseDto,
-      ActionFieldsValidationResponse,
+      AttributeFieldsValidationResponse,
       TaskResponseDto,
     ],
     ignoreGlobalPrefix: false,  
