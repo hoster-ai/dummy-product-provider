@@ -74,6 +74,12 @@ export class AttributeFieldsValidationResponse extends BaseResponse {
   item_attributes?: FieldDto[];
 }
 
+export class ValidateResponseDto extends BaseResponse {
+  result: boolean;
+
+  fields?: FieldDto[];
+}
+
 export class TaskResponseDto extends BaseResponse {
   taskId: string;
 }

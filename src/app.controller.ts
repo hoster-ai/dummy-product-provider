@@ -19,7 +19,7 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { AppService } from './app.service';
-import { RequestDto } from './dtos/data.request.dto';
+import { RequestDto } from './dtos/request.dto';
 import {
   MetaResponseDto,
   BooleanResponseDto,
@@ -37,7 +37,7 @@ import { LanguageEnum } from './enums/language.enum';
 @ApiBearerAuth()
 @ApiUnauthorizedResponse({ description: 'Unauthorized' })
 export class AppController {
-  constructor(private readonly service: AppService) {}
+  constructor(private readonly service: AppService) { }
 
   /**
    * @returns ProviderInfoResponseDto
@@ -389,6 +389,7 @@ export class AppController {
   @ApiOkResponse()
   @HttpCode(200)
   async validateProductAttributes(
+    // TODO add product to validate
     @Body() requestBody: { [key: string]: string },
   ): Promise<AttributeFieldsValidationResponse> {
     const osActionField = this.service.getProductAttributesById('os');
@@ -424,26 +425,26 @@ export class AppController {
     };
   }
 
-    /**
-   *
-   * @param requestBody
-   * @returns Promise boolean
-   */
-    @ApiBody({ type: "object" })
-    @Post('validate/item-attributes')
-    @ApiOkResponse()
-    @HttpCode(200)
-    async validateItemAttributes(
-      @Body() requestBody: { [key: string]: string },
-    ): Promise<AttributeFieldsValidationResponse> {
-      const testAttribute = this.service.getItemAttributesById('test');
-  
-      return {
-        code: 200,
-        message: 'Ok',
-        item_attributes: [testAttribute],
-      };
-    }
+  /**
+ *
+ * @param requestBody
+ * @returns Promise boolean
+ */
+  @ApiBody({ type: "object" })
+  @Post('validate/item-attributes')
+  @ApiOkResponse()
+  @HttpCode(200)
+  async validateItemAttributes(
+    @Body() requestBody: { [key: string]: string },
+  ): Promise<AttributeFieldsValidationResponse> {
+    const testAttribute = this.service.getItemAttributesById('test');
+
+    return {
+      code: 200,
+      message: 'Ok',
+      item_attributes: [testAttribute],
+    };
+  }
 
   @Post('install')
   @ApiOkResponse()
@@ -508,4 +509,29 @@ export class AppController {
       },
     };
   }
+
+  @Get('setup-status')
+  @ApiOkResponse()
+  @HttpCode(200)
+  async setupStatus(
+  ): Promise<any> {
+    // The possible statuses:
+    // - 'success': Indicates the setup was completed successfully.
+    // - 'failure': Indicates the setup failed due to an error. (example: credentials given are wrong).
+    // - 'pending': Indicates the setup is currently in progress.
+    const statuses = ['success', 'failure', 'pending'];
+    const randomStatus = statuses[Math.floor(Math.random() * statuses.length)];
+
+    return {
+      code: 200,
+      status: randomStatus,
+      message:
+        randomStatus === 'success'
+          ? 'Setup completed successfully'
+          : randomStatus === 'failure'
+            ? 'Setup failed due to a random error'
+            : 'Setup is currently pending',
+    };
+  }
+
 }
