@@ -28,6 +28,7 @@ import {
   TaskResponseDto,
 } from './dtos/responses.dto';
 import { ApiExceptionFilter } from './exception.filter';
+import { LanguageEnum } from './enums/language.enum';
 
 @Controller()
 @ApiTags('product-provider')
@@ -49,8 +50,8 @@ export class AppController {
       code: 200,
       message: 'Ok',
       info: {
-        name: '',
-        actionFields: this.service.getActionFields(),
+        name: 'Dummy Product Integration',
+        product_attributes: this.service.getActionFields(),
         productTabs: [{
           label: 'Product Tab',
           url: 'https://www.google.com',
@@ -65,7 +66,9 @@ export class AppController {
           label: 'Settings',
           url: 'https://www.google.com',
         }],
-        returnMetaKeys: ['id', 'cpus', 'ram', 'disk', 'os', 'panel'],
+        itemMetaKeys: ['id', 'cpus', 'ram', 'disk', 'os', 'panel'],
+        supported_languages: [LanguageEnum.EN],
+        supportedActions: []
       },
     };
   }

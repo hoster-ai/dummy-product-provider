@@ -22,7 +22,7 @@ export class ChargeResponseDto {
   })
   @ApiProperty({
     description: "Variants of the charge response",
-    type: "object"
+    type: Object
   })
   variants: { [key: string]: string | number };
 
