@@ -102,7 +102,7 @@ export class MetaResponseDto extends BaseResponse {
   meta?: MetaDto;
 }
 
-export class ErrorResponseDto {
+export class ErrorResponseDto extends BaseResponse {
   @ApiProperty({
     description: 'An error message or list of error messages',
     example: ['Not implemented'], // Example of the field
