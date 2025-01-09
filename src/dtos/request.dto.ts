@@ -6,24 +6,39 @@ import { UserDataDto } from "./user-data.dto";
 export class RequestDto {
   @IsDefined()
   @IsObject()
-  @ApiProperty({ type: UserDataDto, description: "Here the Hoster sends the User's Data", title: 'User(Customer) Data' })
+  @ApiProperty({
+    type: UserDataDto, // Specifies the type as UserDataDto
+    description: "Here the Hoster sends the User's Data",
+    title: 'User(Customer) Data', // Title for better clarity
+    required: true, // Marks the field as required
+  })
   userData: UserDataDto;
 
   @IsDefined()
   @IsObject()
-  @ApiProperty({ type: ProductDataDto, title: 'Product/Service Data', description: "Here the Hoster sends the User's Product/service Data with any changes made." })
+  @ApiProperty({
+    type: ProductDataDto, // Specifies the type as ProductDataDto
+    title: 'Product/Service Data', // Title of the property
+    description: "Here the Hoster sends the User's Product/service Data with any changes made.",
+    required: true, // Marks the field as required
+  })
   productData: ProductDataDto;
 
   @IsDefined()
   @IsObject()
-  @ApiProperty({ type: ProductDataDto, title: 'Previous Product/Service Data', description: "Here the Hoster sends the User's Product/Service Data as it was before any changes were requested.", })
+  @ApiProperty({
+    type: ProductDataDto, // Specifies the type as ProductDataDto
+    title: 'Previous Product/Service Data', // Title of the property
+    description: "Here the Hoster sends the User's Product/Service Data as it was before any changes were requested(require).",
+    required: false, // Marks the field as optional
+  })
   previousProductData?: ProductDataDto;
 }
 
 export class ValidateRequestDto {
   @ApiProperty({
     type: String,
-    description: "id of Addon Feature that requires remote validation.",
+    description: "id of Attribute that requires remote validation.",
     example: "station_name"
   })
   fieldToBeValidated: string;
@@ -31,7 +46,7 @@ export class ValidateRequestDto {
   @ApiProperty({
     type: Object,
     additionalProperties: true,
-    description: "Addon Feature fields to be used for Remote Validation.The key is the id of the feature as a string and the value is of any type'",
+    description: "Attribute fields to be used for Remote Validation.The key is the id of the feature as a string and the value is of any type'",
     example: [
       {
         max_listeners_id: 15,
@@ -43,13 +58,13 @@ export class ValidateRequestDto {
   fields: Record<string, any>;
 }
 
-export class DynamicAddonRequest{
+export class DynamicItemAttributeRequest{
   @ApiProperty({
     type: String,
-    description: "id of Addon Feature that requires Dynamic load.",
+    description: "id of the Attribute that requires Dynamic load.",
     example: "station_name"
   })
-  addonOrAttributeToBeReturned: string;
+  itemAttributeToBeReturned: string;
 
   @ApiProperty({
     type: Object,

@@ -9,8 +9,8 @@ import {
   HttpCode,
   Request,
   BadRequestException,
+  UseInterceptors,
 } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 import {
   ApiBearerAuth,
   ApiBody,
@@ -19,22 +19,26 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { AppService } from './app.service';
-import { RequestDto } from './dtos/request.dto';
+import { RequestDto, ValidateRequestDto } from './dtos/request.dto';
 import {
   MetaResponseDto,
   BooleanResponseDto,
   InfoResponseDto,
   AttributeFieldsValidationResponse,
   TaskResponseDto,
+  SuccessResponseDto,
 } from './dtos/responses.dto';
 import { ApiExceptionFilter } from './exception.filter';
 import { LanguageEnum } from './enums/language.enum';
+import { hasAdminRights, senderIsHoster } from './auth/auth.interceptors';
+import { AuthGuard } from './auth/auth.guard';
 
 @Controller()
 @ApiTags('product-provider')
 @UseFilters(new ApiExceptionFilter())
-@UseGuards(AuthGuard('bearer'))
-@ApiBearerAuth()
+@UseGuards(AuthGuard)
+@UseInterceptors(senderIsHoster, hasAdminRights)
+@ApiBearerAuth("JWT-auth")
 @ApiUnauthorizedResponse({ description: 'Unauthorized' })
 export class AppController {
   constructor(private readonly service: AppService) { }
@@ -83,7 +87,7 @@ export class AppController {
   @Post('create')
   async create(
     @Body() requestBody: RequestDto,
-  ): Promise<MetaResponseDto | TaskResponseDto> {
+  ): Promise<SuccessResponseDto | MetaResponseDto | TaskResponseDto> {
     if (requestBody.productData.id.includes('error')) {
       throw new BadRequestException(
         'Could not create product',
@@ -156,12 +160,12 @@ export class AppController {
   @Post('upgrade')
   @ApiOkResponse({
     description: 'Ok',
-    type: MetaResponseDto || TaskResponseDto,
+    type: SuccessResponseDto || MetaResponseDto || TaskResponseDto,
   })
   @HttpCode(200)
   async upgrade(
     @Body() requestBody: RequestDto,
-  ): Promise<MetaResponseDto | TaskResponseDto> {
+  ): Promise<SuccessResponseDto | MetaResponseDto | TaskResponseDto> {
     if (requestBody.productData.id.includes('error')) {
       throw new BadRequestException(
         'Could not create product',
@@ -195,12 +199,12 @@ export class AppController {
   @Post('downgrade')
   @ApiOkResponse({
     description: 'Ok',
-    type: MetaResponseDto || TaskResponseDto,
+    type: SuccessResponseDto || MetaResponseDto || TaskResponseDto,
   })
   @HttpCode(200)
   async downgrade(
     @Body() requestBody: RequestDto,
-  ): Promise<MetaResponseDto | TaskResponseDto> {
+  ): Promise<SuccessResponseDto | MetaResponseDto | TaskResponseDto> {
     if (requestBody.productData.id.includes('error')) {
       throw new BadRequestException(
         'Could not create product',
@@ -233,13 +237,13 @@ export class AppController {
    */
   @ApiOkResponse({
     description: 'Ok',
-    type: MetaResponseDto || TaskResponseDto,
+    type: BooleanResponseDto || MetaResponseDto || TaskResponseDto,
   })
   @HttpCode(200)
   @Post('suspend')
   async suspend(
     @Body() requestBody: RequestDto,
-  ): Promise<MetaResponseDto | TaskResponseDto> {
+  ): Promise<BooleanResponseDto | MetaResponseDto | TaskResponseDto> {
     if (requestBody.productData.id.includes('error')) {
       throw new BadRequestException(
         'Could not create product',
@@ -272,13 +276,13 @@ export class AppController {
    */
   @ApiOkResponse({
     description: 'Ok',
-    type: MetaResponseDto || TaskResponseDto,
+    type: BooleanResponseDto || MetaResponseDto || TaskResponseDto,
   })
   @HttpCode(200)
   @Post('unsuspend')
   async unsuspend(
     @Body() requestBody: RequestDto,
-  ): Promise<MetaResponseDto | TaskResponseDto> {
+  ): Promise<BooleanResponseDto | MetaResponseDto | TaskResponseDto> {
     if (requestBody.productData.id.includes('error')) {
       throw new BadRequestException(
         'Could not create product',
@@ -390,7 +394,7 @@ export class AppController {
   @HttpCode(200)
   async validateProductAttributes(
     // TODO add product to validate
-    @Body() requestBody: { [key: string]: string },
+    @Body() requestBody: ValidateRequestDto
   ): Promise<AttributeFieldsValidationResponse> {
     const osActionField = this.service.getProductAttributesById('os');
     const panelActionField = this.service.getProductAttributesById('panel');
