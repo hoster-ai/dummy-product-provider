@@ -64,7 +64,7 @@ export class DynamicItemAttributeRequest{
     description: "id of the Attribute that requires Dynamic load.",
     example: "station_name"
   })
-  itemAttributeToBeReturned: string;
+  attributeToBeReturned: string;
 
   @ApiProperty({
     type: Object,
@@ -79,4 +79,18 @@ export class DynamicItemAttributeRequest{
       "Product_attributes are all the attributes of a specific product. These are the attributes of the product as chosen by the seller when creating it. The key is the name of the attribute as a key and the value is of <b>any</b> type",
   })
   product_attributes: Record<string, any>;
+
+  @ApiProperty({
+    type: Object,
+    additionalProperties: true,
+    title: "Item Attributes",
+    example: {
+      max_listeners: 15,
+      hdd: "1G",
+      station_name: "MyStation",
+    },
+    description:
+      "Item attributes are all the attributes of a specific product. These are the attributes of the product as chosen by the client when ordering it. The key is the name of the attribute as a key and the value is of <b>any</b> type",
+  })
+  item_attributes: Record<string, any>;
 }

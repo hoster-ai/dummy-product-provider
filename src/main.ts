@@ -5,7 +5,7 @@ import { ValidationError } from 'class-validator';
 import { AppModule } from './app.module';
 import { ChargeResponseDto } from './dtos/charge.response.dto';
 import { DynamicPriceInfoDto } from './dtos/provider-info.dto';
-import { AttributeFieldsValidationResponse, BooleanResponseDto, DynamicItemAttributesResponse, ErrorResponseDto, InfoResponseDto, SuccessResponseDto, TaskResponseDto, ValidateResponseDto } from './dtos/responses.dto';
+import { AttributeFieldsValidationResponse, BooleanResponseDto, DynamicItemAttributesResponse, ErrorResponseDto, InfoResponseDto, SuccessResponseDto, TaskResponseDto,  } from './dtos/responses.dto';
 import { CountryEnum } from './enums/country.enum';
 import { FieldDto } from './dtos/field.dto';
 
@@ -48,12 +48,13 @@ async function bootstrap() {
       SuccessResponseDto,
       ErrorResponseDto,
       InfoResponseDto,
-      ValidateResponseDto,
+      // ValidateResponseDto,
       DynamicItemAttributesResponse,
       BooleanResponseDto,
     ],
   }); // here you can declare any extra models you create and add them to the swagger api
   SwaggerModule.setup('api', app, document);
+  document.tags = document.tags?.filter(tag => tag.name !== 'App');
 
   app.enableCors({ origin: "http//:hoster.ai" }); // here you can set any origin points you wish to give access to, as well as any other Cors functionality
 

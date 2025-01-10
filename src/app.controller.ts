@@ -1,40 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import {
-  Controller,
-  Post,
-  Body,
-  Get,
-  UseGuards,
-  UseFilters,
-  HttpCode,
-  Request,
-  BadRequestException,
-  UseInterceptors,
-} from '@nestjs/common';
-import {
-  ApiBearerAuth,
-  ApiBody,
-  ApiOkResponse,
-  ApiTags,
-  ApiUnauthorizedResponse,
-} from '@nestjs/swagger';
+import { Controller, Post, Body, Get, UseGuards, UseFilters, HttpCode, Request, BadRequestException, UseInterceptors } from '@nestjs/common';
+import { ApiBearerAuth, ApiBody, ApiOkResponse, ApiOperation, ApiTags, ApiUnauthorizedResponse, refs } from '@nestjs/swagger';
 import { AppService } from './app.service';
-import { RequestDto, ValidateRequestDto } from './dtos/request.dto';
-import {
-  MetaResponseDto,
-  BooleanResponseDto,
-  InfoResponseDto,
-  AttributeFieldsValidationResponse,
-  TaskResponseDto,
-  SuccessResponseDto,
-} from './dtos/responses.dto';
+import { DynamicItemAttributeRequest, RequestDto, ValidateRequestDto } from './dtos/request.dto';
+import { BooleanResponseDto, InfoResponseDto, AttributeFieldsValidationResponse, TaskResponseDto, SuccessResponseDto, ErrorResponseDto, DynamicItemAttributesResponse as DynamicAttributesResponse } from './dtos/responses.dto';
 import { ApiExceptionFilter } from './exception.filter';
 import { LanguageEnum } from './enums/language.enum';
 import { hasAdminRights, senderIsHoster } from './auth/auth.interceptors';
 import { AuthGuard } from './auth/auth.guard';
+import { JwtPayloadRequest } from './dtos/jwt-payload.request';
 
 @Controller()
-@ApiTags('product-provider')
 @UseFilters(new ApiExceptionFilter())
 @UseGuards(AuthGuard)
 @UseInterceptors(senderIsHoster, hasAdminRights)
@@ -46,10 +22,13 @@ export class AppController {
   /**
    * @returns ProviderInfoResponseDto
    */
+  @ApiTags('Provider')
   @ApiOkResponse({ type: InfoResponseDto })
   @HttpCode(200)
   @Get('info')
-  async info(): Promise<InfoResponseDto> {
+  async info(
+    @Request() request: Request & JwtPayloadRequest,
+  ): Promise<InfoResponseDto> {
     return {
       code: 200,
       message: 'Ok',
@@ -70,7 +49,7 @@ export class AppController {
           label: 'Settings',
           url: 'https://www.google.com',
         }],
-        itemMetaKeys: ['id', 'cpus', 'ram', 'disk', 'os', 'panel'],
+        itemDataKeys: ['id', 'cpus', 'ram', 'disk', 'os', 'panel'],
         supported_languages: [LanguageEnum.EN],
         supportedActions: []
       },
@@ -82,12 +61,18 @@ export class AppController {
    * @param requestBody RequestDto
    * @returns Promise with ResponseDto
    */
+  @ApiTags('Product')
   @ApiBody({ type: RequestDto })
+  @ApiOkResponse({
+    description: 'Ok',
+    type: SuccessResponseDto || TaskResponseDto,
+  })
   @HttpCode(201)
   @Post('create')
   async create(
+    @Request() request: Request & JwtPayloadRequest,
     @Body() requestBody: RequestDto,
-  ): Promise<SuccessResponseDto | MetaResponseDto | TaskResponseDto> {
+  ): Promise<SuccessResponseDto | TaskResponseDto | ErrorResponseDto> {
     if (requestBody.productData.id.includes('error')) {
       throw new BadRequestException(
         'Could not create product',
@@ -106,9 +91,14 @@ export class AppController {
     return {
       code: 201,
       message: 'Ok',
-      meta: {
-        private: null,
-        public: null,
+      id: "some-id",
+      item_data: {
+        id: 'id',
+        cpus: 1,
+        ram: 1,
+        disk: 1,
+        os: 'os',
+        panel: 'panel',
       },
     };
   }
@@ -118,15 +108,17 @@ export class AppController {
    * @param requestBody
    * @returns Promise with ResponseDto
    */
+  @ApiTags('Product')
   @Post('renew')
   @ApiOkResponse({
     description: 'Ok',
-    type: MetaResponseDto || TaskResponseDto,
+    type: SuccessResponseDto || TaskResponseDto,
   })
   @HttpCode(200)
   async renew(
+    @Request() request: Request & JwtPayloadRequest,
     @Body() requestBody: RequestDto,
-  ): Promise<MetaResponseDto | TaskResponseDto> {
+  ): Promise<BooleanResponseDto | TaskResponseDto> {
     if (requestBody.productData.id.includes('error')) {
       throw new BadRequestException(
         'Could not create product',
@@ -145,10 +137,7 @@ export class AppController {
     return {
       code: 201,
       message: 'Ok',
-      meta: {
-        private: null,
-        public: null,
-      },
+      result: true
     };
   }
 
@@ -157,15 +146,17 @@ export class AppController {
    * @param requestBody
    * @returns Promise with ResponseDto
    */
+  @ApiTags('Product')
   @Post('upgrade')
   @ApiOkResponse({
     description: 'Ok',
-    type: SuccessResponseDto || MetaResponseDto || TaskResponseDto,
+    type: SuccessResponseDto || TaskResponseDto,
   })
   @HttpCode(200)
   async upgrade(
+    @Request() request: Request & JwtPayloadRequest,
     @Body() requestBody: RequestDto,
-  ): Promise<SuccessResponseDto | MetaResponseDto | TaskResponseDto> {
+  ): Promise<SuccessResponseDto | TaskResponseDto> {
     if (requestBody.productData.id.includes('error')) {
       throw new BadRequestException(
         'Could not create product',
@@ -184,9 +175,14 @@ export class AppController {
     return {
       code: 201,
       message: 'Ok',
-      meta: {
-        private: null,
-        public: null,
+      id: "some-id",
+      item_data: {
+        id: 'id',
+        cpus: 1,
+        ram: 1,
+        disk: 1,
+        os: 'os',
+        panel: 'panel',
       },
     };
   }
@@ -196,15 +192,17 @@ export class AppController {
    * @param requestBody
    * @returns Promise with ResponseDto
    */
+  @ApiTags('Product')
   @Post('downgrade')
   @ApiOkResponse({
     description: 'Ok',
-    type: SuccessResponseDto || MetaResponseDto || TaskResponseDto,
+    type: SuccessResponseDto || TaskResponseDto,
   })
   @HttpCode(200)
   async downgrade(
+    @Request() request: Request & JwtPayloadRequest,
     @Body() requestBody: RequestDto,
-  ): Promise<SuccessResponseDto | MetaResponseDto | TaskResponseDto> {
+  ): Promise<SuccessResponseDto | TaskResponseDto> {
     if (requestBody.productData.id.includes('error')) {
       throw new BadRequestException(
         'Could not create product',
@@ -223,9 +221,14 @@ export class AppController {
     return {
       code: 201,
       message: 'Ok',
-      meta: {
-        private: null,
-        public: null,
+      id: "some-id",
+      item_data: {
+        id: 'id',
+        cpus: 1,
+        ram: 1,
+        disk: 1,
+        os: 'os',
+        panel: 'panel',
       },
     };
   }
@@ -235,15 +238,17 @@ export class AppController {
    * @param requestBody
    * @returns Promise with ResponseDto
    */
+  @ApiTags('Product')
   @ApiOkResponse({
     description: 'Ok',
-    type: BooleanResponseDto || MetaResponseDto || TaskResponseDto,
+    type: BooleanResponseDto || TaskResponseDto,
   })
   @HttpCode(200)
   @Post('suspend')
   async suspend(
+    @Request() request: Request & JwtPayloadRequest,
     @Body() requestBody: RequestDto,
-  ): Promise<BooleanResponseDto | MetaResponseDto | TaskResponseDto> {
+  ): Promise<BooleanResponseDto | TaskResponseDto> {
     if (requestBody.productData.id.includes('error')) {
       throw new BadRequestException(
         'Could not create product',
@@ -262,10 +267,7 @@ export class AppController {
     return {
       code: 201,
       message: 'Ok',
-      meta: {
-        private: null,
-        public: null,
-      },
+      result: true
     };
   }
 
@@ -274,15 +276,17 @@ export class AppController {
    * @param requestBody
    * @returns Promise with ResponseDto
    */
+  @ApiTags('Product')
   @ApiOkResponse({
     description: 'Ok',
-    type: BooleanResponseDto || MetaResponseDto || TaskResponseDto,
+    type: BooleanResponseDto || TaskResponseDto,
   })
   @HttpCode(200)
   @Post('unsuspend')
   async unsuspend(
+    @Request() request: Request & JwtPayloadRequest,
     @Body() requestBody: RequestDto,
-  ): Promise<BooleanResponseDto | MetaResponseDto | TaskResponseDto> {
+  ): Promise<BooleanResponseDto | TaskResponseDto> {
     if (requestBody.productData.id.includes('error')) {
       throw new BadRequestException(
         'Could not create product',
@@ -301,10 +305,7 @@ export class AppController {
     return {
       code: 201,
       message: 'Ok',
-      meta: {
-        private: null,
-        public: null,
-      },
+      result: true
     };
   }
 
@@ -313,10 +314,12 @@ export class AppController {
    * @param requestBody
    * @returns Promise boolean
    */
+  @ApiTags('Product')
   @Post('upgradeable')
   @ApiOkResponse({ description: 'Ok', type: BooleanResponseDto })
   @HttpCode(200)
   async upgradeable(
+    @Request() request: Request & JwtPayloadRequest,
     @Body() requestBody: RequestDto,
   ): Promise<BooleanResponseDto> {
     return {
@@ -331,10 +334,12 @@ export class AppController {
    * @param requestBody
    * @returns Promise boolean
    */
+  @ApiTags('Product')
   @Post('downgradeable')
   @ApiOkResponse({ description: 'Ok', type: BooleanResponseDto })
   @HttpCode(200)
   async downgradeable(
+    @Request() request: Request & JwtPayloadRequest,
     @Body() requestBody: RequestDto,
   ): Promise<BooleanResponseDto> {
     return {
@@ -349,15 +354,17 @@ export class AppController {
    * @param requestBody
    * @returns Promise boolean
    */
+  @ApiTags('Product')
   @Post('delete')
   @ApiOkResponse({
     description: 'Ok',
-    type: MetaResponseDto || TaskResponseDto,
+    type: BooleanResponseDto || TaskResponseDto,
   })
   @HttpCode(200)
   async delete(
+    @Request() request: Request & JwtPayloadRequest,
     @Body() requestBody: RequestDto,
-  ): Promise<MetaResponseDto | TaskResponseDto> {
+  ): Promise<BooleanResponseDto | TaskResponseDto> {
     if (requestBody.productData.id.includes('error')) {
       throw new BadRequestException(
         'Could not create product',
@@ -376,10 +383,7 @@ export class AppController {
     return {
       code: 201,
       message: 'Ok',
-      meta: {
-        private: null,
-        public: null,
-      },
+      result: true,
     };
   }
 
@@ -388,12 +392,14 @@ export class AppController {
    * @param requestBody
    * @returns Promise boolean
    */
+  @ApiTags('Product')
   @ApiBody({ type: "object" })
   @Post('validate/product-attributes')
   @ApiOkResponse()
   @HttpCode(200)
   async validateProductAttributes(
     // TODO add product to validate
+    @Request() request: Request & JwtPayloadRequest,
     @Body() requestBody: ValidateRequestDto
   ): Promise<AttributeFieldsValidationResponse> {
     const osActionField = this.service.getProductAttributesById('os');
@@ -434,11 +440,16 @@ export class AppController {
  * @param requestBody
  * @returns Promise boolean
  */
+  @ApiTags('Product')
+  @ApiOkResponse({
+    type: AttributeFieldsValidationResponse
+  })
   @ApiBody({ type: "object" })
   @Post('validate/item-attributes')
   @ApiOkResponse()
   @HttpCode(200)
   async validateItemAttributes(
+    @Request() request: Request & JwtPayloadRequest,
     @Body() requestBody: { [key: string]: string },
   ): Promise<AttributeFieldsValidationResponse> {
     const testAttribute = this.service.getItemAttributesById('test');
@@ -450,17 +461,48 @@ export class AppController {
     };
   }
 
+  @ApiTags("Product")
+  @ApiOperation({
+    summary: "Return the addons of a specific product",
+    description:
+      "Receive the id of the addon to be returned and the Product Attributes, and send back the addons of the Product.",
+  })
+  @ApiOkResponse({
+    schema: { oneOf: refs(BooleanResponseDto, DynamicAttributesResponse, ErrorResponseDto) },
+  })
+  @Post("dynamic-attribute")
+  @HttpCode(200)
+  async returnAttributes(
+    @Request() request: Request & JwtPayloadRequest,
+    @Body() requestBody: DynamicItemAttributeRequest
+  ): Promise<DynamicAttributesResponse | BooleanResponseDto | ErrorResponseDto> {
+    const fieldId: string = requestBody.attributeToBeReturned;
+    const product_attributes: Record<string, any> =
+      requestBody.product_attributes;
+
+
+    return {
+      code: 200,
+      message: "Ok",
+      result: true
+    };
+  }
+
+
+  @ApiTags('Provider')
+  @ApiOperation({ summary: "Install the provider to the Hoster." })
   @Post('install')
   @ApiOkResponse()
   @HttpCode(200)
   @ApiBody({ type: "object" })
   async install(
-    @Request() requestBody: any,
-  ): Promise<TaskResponseDto | MetaResponseDto> {
+    @Request() request: Request & JwtPayloadRequest,
+    @Body() requestBody: any,
+  ): Promise<TaskResponseDto | BooleanResponseDto> {
     if (requestBody.productData.id.includes('error')) {
       throw new BadRequestException(
         'Could not create product',
-        JSON.stringify(requestBody),
+        JSON.stringify(request),
       );
     }
 
@@ -475,20 +517,20 @@ export class AppController {
     return {
       code: 201,
       message: 'Ok',
-      meta: {
-        private: null,
-        public: null,
-      },
+      result: true
     };
   }
 
+  @ApiTags('Provider')
+  @ApiOperation({ summary: "Uninstall the provider from the Hoster." })
   @Post('uninstall')
   @ApiOkResponse()
   @HttpCode(200)
   @ApiBody({ type: "object" })
   async uninstall(
-    @Request() requestBody: any,
-  ): Promise<TaskResponseDto | MetaResponseDto> {
+    @Request() request: Request & JwtPayloadRequest,
+    @Body() requestBody: any
+  ): Promise<TaskResponseDto | BooleanResponseDto> {
     if (requestBody.productData.id.includes('error')) {
       throw new BadRequestException(
         'Could not create product',
@@ -507,13 +549,11 @@ export class AppController {
     return {
       code: 201,
       message: 'Ok',
-      meta: {
-        private: null,
-        public: null,
-      },
+      result: true
     };
   }
 
+  @ApiTags('Provider')
   @Get('setup-status')
   @ApiOkResponse()
   @HttpCode(200)
@@ -523,6 +563,7 @@ export class AppController {
     // - 'success': Indicates the setup was completed successfully.
     // - 'failure': Indicates the setup failed due to an error. (example: credentials given are wrong).
     // - 'pending': Indicates the setup is currently in progress.
+    // if your integration has no need for additional setup besides install, then this endpoint need not be implemented.
     const statuses = ['success', 'failure', 'pending'];
     const randomStatus = statuses[Math.floor(Math.random() * statuses.length)];
 

@@ -9,13 +9,12 @@ export class BaseResponse {
   /**
    * Response code
    */
-  @ApiResponseProperty({
+  @ApiResponseProperty()
+  @ApiProperty({
+    title: 'Response code', // Title for documentation
     type: Number, // Specifies the type as Number
     example: 200, // Example value
-  })
-  @ApiProperty({
     description: 'Response code', // Description of the property
-    type: Number, // Ensures Swagger understands the type
     required: true, // Indicates that this field is required
     nullable: false, // Specifies that this property cannot be null
   })
@@ -24,14 +23,13 @@ export class BaseResponse {
   /**
    * Response message
    */
-  @ApiResponseProperty({
-    type: String, // Specifies the type as String
-    example: 'Ok', // Example value
-  })
+  @ApiResponseProperty()
   @ApiProperty({
+    title: 'Response message', // Title for documentation
+    type: String,  // Specifies the type as String
+    example: 'Ok', // Example value
     description: 'Response message', // Description of the property
-    type: String, // Ensures Swagger understands the type
-    required: true, // Indicates that this field is required
+    required: true,  // Indicates that this field is required
     nullable: false, // Specifies that this property cannot be null
   })
   message: string;
@@ -43,6 +41,7 @@ export class InfoResponseDto extends BaseResponse {
    */
   @ApiResponseProperty({})
   @ApiProperty({
+    title: 'Provider information', // Title for documentation
     description: 'Detailed information about the provider.', // Description for documentation
     type: ProviderInfoDto, // Links the type to the DTO
     required: true, // Indicates the field is required
@@ -65,6 +64,7 @@ export class SuccessResponseDto extends BaseResponse {
   id: string;
 
   @ApiProperty({
+    title: "Data to be returned at the creation of a product",
     type: Object, // Specifies the type as object
     additionalProperties: { type: 'string' }, // Indicates the value of each property is a string
     example: {
@@ -85,25 +85,9 @@ export class SuccessResponseDto extends BaseResponse {
 }
 
 
-export class MetaResponseDto extends BaseResponse {
-  /**
-   * Meta information
-   */
-  @ApiResponseProperty({
-    example: MetaDto,
-  })
-  @ApiProperty({
-    description: 'Meta information about pagination or related data.',
-    type: MetaDto, // Specifies the type of the property
-    required: false, // Indicates whether this property is required
-    nullable: true, // Specifies if the property can be null
-    isArray: false, // Specifies whether the property is an array
-  })
-  meta?: MetaDto;
-}
-
 export class ErrorResponseDto extends BaseResponse {
   @ApiProperty({
+    title: 'Error message(s)', // Title for documentation
     description: 'An error message or list of error messages',
     example: ['Not implemented'], // Example of the field
     required: false, // Indicates whether the field is required
@@ -121,7 +105,9 @@ export class ErrorResponseDto extends BaseResponse {
 }
 
 export class AttributeFieldsValidationResponse extends BaseResponse {
-  @ApiResponseProperty({
+  @ApiResponseProperty()
+  @ApiProperty({
+    title: 'Product attribute fields validation results',
     type: [FieldDto], // Specifies that this property is an array of FieldDto objects
     example: [
       {
@@ -130,17 +116,16 @@ export class AttributeFieldsValidationResponse extends BaseResponse {
         isValid: true,
       },
     ], // Example value showing the structure of FieldDto
-  })
-  @ApiProperty({
     description: 'List of product attribute fields with validation results.',
-    type: [FieldDto], // Specifies the type as an array of FieldDto
     required: false, // Indicates the field is optional
     isArray: true, // Specifies that the property is an array
     nullable: true, // Allows the property to be null
   })
   product_attributes?: FieldDto[];
 
-  @ApiResponseProperty({
+  @ApiResponseProperty()
+  @ApiProperty({
+    title: 'Item attribute fields validation results',
     type: [FieldDto], // Specifies that this property is an array of FieldDto objects
     example: [
       {
@@ -149,10 +134,7 @@ export class AttributeFieldsValidationResponse extends BaseResponse {
         isValid: true,
       },
     ], // Example value showing the structure of FieldDto
-  })
-  @ApiProperty({
     description: 'List of item attribute fields with validation results.',
-    type: [FieldDto], // Specifies the type as an array of FieldDto
     required: false, // Indicates the field is optional
     isArray: true, // Specifies that the property is an array
     nullable: true, // Allows the property to be null
@@ -160,47 +142,46 @@ export class AttributeFieldsValidationResponse extends BaseResponse {
   item_attributes?: FieldDto[];
 }
 
-export class ValidateResponseDto extends BaseResponse {
-  @ApiResponseProperty({
-    type: Boolean, // Specifies the type as Boolean
-    example: true, // Example value
-  })
-  @ApiProperty({
-    description: 'Indicates a boolean result (true/false).', // Description of the property
-    type: Boolean, // Ensures Swagger understands the type
-    required: true, // Indicates the field is required
-    nullable: false, // Specifies that this property cannot be null
-  })
-  result: boolean;
+// export class ValidateResponseDto extends BaseResponse {
+//   @ApiResponseProperty({
+//     type: Boolean, // Specifies the type as Boolean
+//     example: true, // Example value
+//   })
+//   @ApiProperty({
+//     description: 'Indicates a boolean result (true/false).', // Description of the property
+//     type: Boolean, // Ensures Swagger understands the type
+//     required: true, // Indicates the field is required
+//     nullable: false, // Specifies that this property cannot be null
+//   })
+//   result: boolean;
 
-  @ApiResponseProperty({
-    type: [FieldDto], // Specifies that this property is an array of FieldDto objects
-    example: [
-      {
-        fieldName: "size",
-        fieldValue: "M",
-        isValid: true,
-      },
-    ], // Example value showing the structure of FieldDto
-  })
-  @ApiProperty({
-    description: 'List of fields with validation results.',
-    type: [FieldDto], // Specifies the type as an array of FieldDto
-    required: false, // Indicates the field is optional
-    isArray: true, // Specifies that the property is an array
-    nullable: true, // Allows the property to be null
-  })
-  fields?: FieldDto[];
-}
+//   @ApiResponseProperty({
+//     type: [FieldDto], // Specifies that this property is an array of FieldDto objects
+//     example: [
+//       {
+//         fieldName: "size",
+//         fieldValue: "M",
+//         isValid: true,
+//       },
+//     ], // Example value showing the structure of FieldDto
+//   })
+//   @ApiProperty({
+//     description: 'List of fields with validation results.',
+//     type: [FieldDto], // Specifies the type as an array of FieldDto
+//     required: false, // Indicates the field is optional
+//     isArray: true, // Specifies that the property is an array
+//     nullable: true, // Allows the property to be null
+//   })
+//   fields?: FieldDto[];
+// }
 
 export class TaskResponseDto extends BaseResponse {
-  @ApiResponseProperty({
+  @ApiResponseProperty()
+  @ApiProperty({
+    title: 'Task ID', // Title for documentation
     type: String, // Specifies the type as String
     example: "12345", // Example value
-  })
-  @ApiProperty({
     description: 'Unique identifier for the task.', // Description of the property
-    type: String, // Ensures Swagger understands the type
     required: true, // Indicates the field is required
     nullable: false, // Specifies that this property cannot be null
   })
@@ -208,13 +189,12 @@ export class TaskResponseDto extends BaseResponse {
 }
 
 export class BooleanResponseDto extends BaseResponse {
-  @ApiResponseProperty({
+  @ApiResponseProperty()
+  @ApiProperty({
+    title: 'Result', // Title for documentation
     type: Boolean, // Specifies the type as Boolean
     example: true, // Example value
-  })
-  @ApiProperty({
     description: 'Indicates a boolean result (true/false).', // Description of the property
-    type: Boolean, // Ensures Swagger understands the type
     required: true, // Indicates the field is required
     nullable: false, // Specifies that this property cannot be null
   })

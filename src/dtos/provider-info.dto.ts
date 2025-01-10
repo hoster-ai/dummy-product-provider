@@ -294,8 +294,8 @@ export class ProviderInfoDto {
    */
   @ApiResponseProperty()
   @ApiProperty({
-    description: 'The keys of the meta fields that should be returned in the "create" action (optional).',
+    description: 'The keys of the data fields that should be returned in the "create" action (optional).',
   })
-  itemMetaKeys?: string[];
+  itemDataKeys?: string[];
 }
 
