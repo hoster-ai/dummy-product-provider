@@ -58,6 +58,7 @@ export class ValidateRequestDto {
   fields: Record<string, any>;
 }
 
+//TODO Να το συζητησοθμε
 export class DynamicItemAttributeRequest{
   @ApiProperty({
     type: String,
@@ -83,14 +84,14 @@ export class DynamicItemAttributeRequest{
   @ApiProperty({
     type: Object,
     additionalProperties: true,
-    title: "Item Attributes",
+    title: "Product Attributes",
     example: {
       max_listeners: 15,
       hdd: "1G",
       station_name: "MyStation",
     },
     description:
-      "Item attributes are all the attributes of a specific product. These are the attributes of the product as chosen by the client when ordering it. The key is the name of the attribute as a key and the value is of <b>any</b> type",
+      "Product_attributes are all the attributes of a specific product. These are the attributes of the product as chosen by the seller when creating it. The key is the name of the attribute as a key and the value is of <b>any</b> type",
   })
   item_attributes: Record<string, any>;
 }
