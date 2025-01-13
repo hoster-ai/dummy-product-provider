@@ -586,10 +586,11 @@ export class AppController {
   }
 
   @ApiTags('Provider')
-  @Get('setup-status')
+  @Get(':companyId/setup-status')
   @ApiOkResponse()
   @HttpCode(200)
   async setupStatus(
+    @Request() request: Request & JwtPayloadRequest,
   ): Promise<SetupStatusResponseDto> {
     // The possible statuses:
     // - 'success': Indicates the setup was completed successfully.
