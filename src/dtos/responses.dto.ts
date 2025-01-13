@@ -4,6 +4,7 @@ import { MetaDto } from './meta.response.dto';
 import { ProviderInfoDto } from './provider-info.dto';
 import { LabelTypeEnum } from 'src/enums/label.type.enum';
 import { IsMongoId } from 'class-validator';
+import { SetupStatusEnum } from 'src/enums/setup-status.enum';
 
 export class BaseResponse {
   /**
@@ -180,8 +181,21 @@ export class BooleanResponseDto extends BaseResponse {
 }
 
 
+export class StatusResponseDto extends BaseResponse {
+  @ApiResponseProperty()
+  @ApiProperty({
+    title: 'Setup Status', // Title for documentation
+    enum: SetupStatusEnum, // Specifies the type as Boolean
+    type: String, // Specifies the type as Boolean
+    example: SetupStatusEnum.PENDING, // Example value
+    description: 'Indicates the setup status of the integration to the company making the request. SUccess means the setup is complete and the integration ready to use. Pending means there are steps that need to be taken for the integration to be available for use. Failure means that an error has occured in the setup process of the integration.', // Description of the property
+    required: true, // Indicates the field is required
+    nullable: false, // Specifies that this property cannot be null
+  })
+  status: SetupStatusEnum;
+}
 
-export class DynamicAttributesResponseDto extends BaseResponse{
+export class DynamicAttributesResponseDto extends BaseResponse {
   @ApiProperty({
     type: [FieldDto],
     example: [

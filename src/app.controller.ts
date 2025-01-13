@@ -3,12 +3,13 @@ import { Controller, Post, Body, Get, UseGuards, UseFilters, HttpCode, Request, 
 import { ApiBearerAuth, ApiBody, ApiOkResponse, ApiOperation, ApiTags, ApiUnauthorizedResponse, refs } from '@nestjs/swagger';
 import { AppService } from './app.service';
 import { DynamicItemAttributeRequest, DynamicProductAttributeRequest, RequestDto, ValidateRequestDto } from './dtos/request.dto';
-import { BooleanResponseDto, InfoResponseDto, ValidateResponseDto, TaskResponseDto, SuccessResponseDto, ErrorResponseDto, DynamicAttributesResponseDto as DynamicAttributesResponseDto } from './dtos/responses.dto';
+import { BooleanResponseDto, InfoResponseDto, ValidateResponseDto, TaskResponseDto, SuccessResponseDto, ErrorResponseDto, DynamicAttributesResponseDto as DynamicAttributesResponseDto, StatusResponseDto as SetupStatusResponseDto } from './dtos/responses.dto';
 import { ApiExceptionFilter } from './exception.filter';
 import { LanguageEnum } from './enums/language.enum';
 import { senderIsHoster } from './auth/auth.interceptors';
 import { AuthGuard } from './auth/auth.guard';
 import { JwtPayloadRequest } from './dtos/jwt-payload.request';
+import { SetupStatusEnum } from './enums/setup-status.enum';
 
 @Controller()
 @UseFilters(new ApiExceptionFilter())
@@ -589,13 +590,13 @@ export class AppController {
   @ApiOkResponse()
   @HttpCode(200)
   async setupStatus(
-  ): Promise<any> {
+  ): Promise<SetupStatusResponseDto> {
     // The possible statuses:
     // - 'success': Indicates the setup was completed successfully.
     // - 'failure': Indicates the setup failed due to an error. (example: credentials given are wrong).
     // - 'pending': Indicates the setup is currently in progress.
     // if your integration has no need for additional setup besides install, then this endpoint need not be implemented.
-    const statuses = ['success', 'failure', 'pending'];
+    const statuses = [SetupStatusEnum.SUCCESS, SetupStatusEnum.FAILURE, SetupStatusEnum.PENDING];
     const randomStatus = statuses[Math.floor(Math.random() * statuses.length)];
 
     return {

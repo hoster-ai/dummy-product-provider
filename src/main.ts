@@ -3,7 +3,7 @@ import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ValidationError } from 'class-validator';
 import { AppModule } from './app.module';
-import { ValidateResponseDto, BooleanResponseDto, DynamicAttributesResponseDto, ErrorResponseDto, InfoResponseDto, SuccessResponseDto, TaskResponseDto, BaseResponse,  } from './dtos/responses.dto';
+import { ValidateResponseDto, BooleanResponseDto, DynamicAttributesResponseDto, ErrorResponseDto, InfoResponseDto, SuccessResponseDto, TaskResponseDto, BaseResponse, StatusResponseDto,  } from './dtos/responses.dto';
 import { FieldDto } from './dtos/field.dto';
 
 async function bootstrap() {
@@ -49,6 +49,7 @@ async function bootstrap() {
       ValidateResponseDto,
       DynamicAttributesResponseDto,
       BooleanResponseDto,
+      StatusResponseDto
     ],
   }); // here you can declare any extra models you create and add them to the swagger api
   SwaggerModule.setup('api', app, document);
