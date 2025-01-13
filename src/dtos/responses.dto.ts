@@ -104,7 +104,17 @@ export class ErrorResponseDto extends BaseResponse {
   errors?: string[] | string;
 }
 
-export class AttributeFieldsValidationResponse extends BaseResponse {
+export class ValidateResponseDto extends BaseResponse {
+  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'Indicates a boolean result (true/false).', // Description of the property
+    example: true, // Example value
+    type: Boolean, // Ensures Swagger understands the type
+    required: true, // Indicates the field is required
+    nullable: false, // Specifies that this property cannot be null
+  })
+  result: boolean;
+
   @ApiResponseProperty()
   @ApiProperty({
     title: 'Product attribute fields validation results',
@@ -142,38 +152,6 @@ export class AttributeFieldsValidationResponse extends BaseResponse {
   item_attributes?: FieldDto[];
 }
 
-// export class ValidateResponseDto extends BaseResponse {
-//   @ApiResponseProperty({
-//     type: Boolean, // Specifies the type as Boolean
-//     example: true, // Example value
-//   })
-//   @ApiProperty({
-//     description: 'Indicates a boolean result (true/false).', // Description of the property
-//     type: Boolean, // Ensures Swagger understands the type
-//     required: true, // Indicates the field is required
-//     nullable: false, // Specifies that this property cannot be null
-//   })
-//   result: boolean;
-
-//   @ApiResponseProperty({
-//     type: [FieldDto], // Specifies that this property is an array of FieldDto objects
-//     example: [
-//       {
-//         fieldName: "size",
-//         fieldValue: "M",
-//         isValid: true,
-//       },
-//     ], // Example value showing the structure of FieldDto
-//   })
-//   @ApiProperty({
-//     description: 'List of fields with validation results.',
-//     type: [FieldDto], // Specifies the type as an array of FieldDto
-//     required: false, // Indicates the field is optional
-//     isArray: true, // Specifies that the property is an array
-//     nullable: true, // Allows the property to be null
-//   })
-//   fields?: FieldDto[];
-// }
 
 export class TaskResponseDto extends BaseResponse {
   @ApiResponseProperty()
@@ -203,7 +181,7 @@ export class BooleanResponseDto extends BaseResponse {
 
 
 
-export class DynamicItemAttributesResponse {
+export class DynamicAttributesResponse {
   @ApiProperty({
     type: [FieldDto],
     example: [

@@ -2,8 +2,8 @@
 import { Controller, Post, Body, Get, UseGuards, UseFilters, HttpCode, Request, BadRequestException, UseInterceptors } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiOkResponse, ApiOperation, ApiTags, ApiUnauthorizedResponse, refs } from '@nestjs/swagger';
 import { AppService } from './app.service';
-import { DynamicItemAttributeRequest, RequestDto, ValidateRequestDto } from './dtos/request.dto';
-import { BooleanResponseDto, InfoResponseDto, AttributeFieldsValidationResponse, TaskResponseDto, SuccessResponseDto, ErrorResponseDto, DynamicItemAttributesResponse as DynamicAttributesResponse } from './dtos/responses.dto';
+import { DynamicItemAttributeRequest, DynamicProductAttributeRequest, RequestDto, ValidateRequestDto } from './dtos/request.dto';
+import { BooleanResponseDto, InfoResponseDto, ValidateResponseDto, TaskResponseDto, SuccessResponseDto, ErrorResponseDto, DynamicAttributesResponse as DynamicAttributesResponse } from './dtos/responses.dto';
 import { ApiExceptionFilter } from './exception.filter';
 import { LanguageEnum } from './enums/language.enum';
 import { hasAdminRights, senderIsHoster } from './auth/auth.interceptors';
@@ -401,7 +401,7 @@ export class AppController {
     // TODO add product to validate
     @Request() request: Request & JwtPayloadRequest,
     @Body() requestBody: ValidateRequestDto
-  ): Promise<AttributeFieldsValidationResponse> {
+  ): Promise<ValidateResponseDto> {
     const osActionField = this.service.getProductAttributesById('os');
     const panelActionField = this.service.getProductAttributesById('panel');
 
@@ -431,6 +431,7 @@ export class AppController {
     return {
       code: 200,
       message: 'Ok',
+      result: true,
       product_attributes: [osActionField, panelActionField],
     };
   }
@@ -442,7 +443,7 @@ export class AppController {
  */
   @ApiTags('Product')
   @ApiOkResponse({
-    type: AttributeFieldsValidationResponse
+    type: ValidateResponseDto
   })
   @ApiBody({ type: "object" })
   @Post('validate/item-attributes')
@@ -450,16 +451,46 @@ export class AppController {
   @HttpCode(200)
   async validateItemAttributes(
     @Request() request: Request & JwtPayloadRequest,
-    @Body() requestBody: { [key: string]: string },
-  ): Promise<AttributeFieldsValidationResponse> {
+    @Body() requestBody: ValidateRequestDto
+  ): Promise<ValidateResponseDto> {
     const testAttribute = this.service.getItemAttributesById('test');
 
     return {
       code: 200,
       message: 'Ok',
+      result: true,
       item_attributes: [testAttribute],
     };
   }
+
+
+  @ApiTags("Product")
+  @ApiOperation({
+    summary: "Return the product attributes of a specific product",
+    description:
+      "Receive the id of the attribute to be returned and the Product Attributes, and send back the addons of the Product.",
+  })
+  @ApiOkResponse({
+    schema: { oneOf: refs(BooleanResponseDto, DynamicAttributesResponse, ErrorResponseDto) },
+  })
+  @Post("dynamic-product-attribute")
+  @HttpCode(200)
+  async returnProductAttributes(
+    @Request() request: Request & JwtPayloadRequest,
+    @Body() requestBody: DynamicProductAttributeRequest
+  ): Promise<DynamicAttributesResponse | BooleanResponseDto | ErrorResponseDto> {
+    const fieldId: string = requestBody.attributeToBeReturned;
+    const item_attributes: Record<string, any> =
+      requestBody.product_attributes;
+
+
+    return {
+      code: 200,
+      message: "Ok",
+      result: true
+    };
+  }
+
 
   @ApiTags("Product")
   @ApiOperation({
@@ -470,14 +501,14 @@ export class AppController {
   @ApiOkResponse({
     schema: { oneOf: refs(BooleanResponseDto, DynamicAttributesResponse, ErrorResponseDto) },
   })
-  @Post("dynamic-attribute")
+  @Post("dynamic-item-attribute")
   @HttpCode(200)
   async returnAttributes(
     @Request() request: Request & JwtPayloadRequest,
     @Body() requestBody: DynamicItemAttributeRequest
   ): Promise<DynamicAttributesResponse | BooleanResponseDto | ErrorResponseDto> {
     const fieldId: string = requestBody.attributeToBeReturned;
-    const product_attributes: Record<string, any> =
+    const item_attributes: Record<string, any> =
       requestBody.product_attributes;
 
 

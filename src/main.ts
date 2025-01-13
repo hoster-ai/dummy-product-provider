@@ -5,7 +5,7 @@ import { ValidationError } from 'class-validator';
 import { AppModule } from './app.module';
 import { ChargeResponseDto } from './dtos/charge.response.dto';
 import { DynamicPriceInfoDto } from './dtos/provider-info.dto';
-import { AttributeFieldsValidationResponse, BooleanResponseDto, DynamicItemAttributesResponse, ErrorResponseDto, InfoResponseDto, SuccessResponseDto, TaskResponseDto,  } from './dtos/responses.dto';
+import { ValidateResponseDto, BooleanResponseDto, DynamicAttributesResponse, ErrorResponseDto, InfoResponseDto, SuccessResponseDto, TaskResponseDto,  } from './dtos/responses.dto';
 import { CountryEnum } from './enums/country.enum';
 import { FieldDto } from './dtos/field.dto';
 
@@ -49,7 +49,7 @@ async function bootstrap() {
       ErrorResponseDto,
       InfoResponseDto,
       // ValidateResponseDto,
-      DynamicItemAttributesResponse,
+      DynamicAttributesResponse,
       BooleanResponseDto,
     ],
   }); // here you can declare any extra models you create and add them to the swagger api

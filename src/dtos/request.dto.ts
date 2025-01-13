@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsDefined, IsObject, IsOptional } from "class-validator";
+import { IsDefined, IsObject } from "class-validator";
 import { ProductDataDto } from "./product-data.dto";
 import { UserDataDto } from "./user-data.dto";
 
@@ -43,19 +43,15 @@ export class ValidateRequestDto {
   })
   fieldToBeValidated: string;
 
+  @IsDefined()
+  @IsObject()
   @ApiProperty({
-    type: Object,
-    additionalProperties: true,
-    description: "Attribute fields to be used for Remote Validation.The key is the id of the feature as a string and the value is of any type'",
-    example: [
-      {
-        max_listeners_id: 15,
-        hdd_id: '1G',
-        station_name_id: 'MyStation'
-      }
-    ]
+    type: ProductDataDto, // Specifies the type as ProductDataDto
+    title: 'Previous Product/Service Data', // Title of the property
+    description: "Here the Hoster sends the User's Product/Service Data as it was before any changes were requested(require).",
+    required: false, // Marks the field as optional
   })
-  fields: Record<string, any>;
+  productData: ProductDataDto;
 }
 
 //TODO Να το συζητησοθμε
@@ -79,7 +75,30 @@ export class DynamicItemAttributeRequest{
     description:
       "Product_attributes are all the attributes of a specific product. These are the attributes of the product as chosen by the seller when creating it. The key is the name of the attribute as a key and the value is of <b>any</b> type",
   })
-  product_attributes: Record<string, any>;
+  product_attributes?: Record<string, any>;
+
+  @ApiProperty({
+    type: Object,
+    additionalProperties: true,
+    title: "Product Attributes",
+    example: {
+      max_listeners: 15,
+      hdd: "1G",
+      station_name: "MyStation",
+    },
+    description:
+      "Product_attributes are all the attributes of a specific product. These are the attributes of the product as chosen by the client when ordering it. The key is the name of the attribute as a key and the value is of <b>any</b> type",
+  })
+  item_attributes?: Record<string, any>;
+}
+
+export class DynamicProductAttributeRequest{
+  @ApiProperty({
+    type: String,
+    description: "id of the Attribute that requires Dynamic load.",
+    example: "station_name"
+  })
+  attributeToBeReturned: string;
 
   @ApiProperty({
     type: Object,
@@ -93,5 +112,19 @@ export class DynamicItemAttributeRequest{
     description:
       "Product_attributes are all the attributes of a specific product. These are the attributes of the product as chosen by the seller when creating it. The key is the name of the attribute as a key and the value is of <b>any</b> type",
   })
-  item_attributes: Record<string, any>;
+  product_attributes?: Record<string, any>;
+
+  @ApiProperty({
+    type: Object,
+    additionalProperties: true,
+    title: "Product Attributes",
+    example: {
+      max_listeners: 15,
+      hdd: "1G",
+      station_name: "MyStation",
+    },
+    description:
+      "Product_attributes are all the attributes of a specific product. These are the attributes of the product as chosen by the client when ordering it. The key is the name of the attribute as a key and the value is of <b>any</b> type",
+  })
+  item_attributes?: Record<string, any>;
 }
