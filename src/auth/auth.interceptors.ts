@@ -26,18 +26,18 @@ import {
     }
   }
   
-  @Injectable()
-  export class hasAdminRights implements NestInterceptor {
-    //check the access level of the sender
-    intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
-      const request: Request & JwtPayloadRequest = context
-        .switchToHttp()
-        .getRequest();
+  // @Injectable()
+  // export class hasAdminRights implements NestInterceptor {
+  //   //check the access level of the sender
+  //   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+  //     const request: Request & JwtPayloadRequest = context
+  //       .switchToHttp()
+  //       .getRequest();
   
-      if (!request.user.admin_rights) {
-        throw new ForbiddenException("Forbidden");
-      }
+  //     if (!request.user.admin_rights) {
+  //       throw new ForbiddenException("Forbidden");
+  //     }
   
-      return next.handle();
-    }
-  }
+  //     return next.handle();
+  //   }
+  // }

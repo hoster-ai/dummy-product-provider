@@ -3,17 +3,17 @@ import { Controller, Post, Body, Get, UseGuards, UseFilters, HttpCode, Request, 
 import { ApiBearerAuth, ApiBody, ApiOkResponse, ApiOperation, ApiTags, ApiUnauthorizedResponse, refs } from '@nestjs/swagger';
 import { AppService } from './app.service';
 import { DynamicItemAttributeRequest, DynamicProductAttributeRequest, RequestDto, ValidateRequestDto } from './dtos/request.dto';
-import { BooleanResponseDto, InfoResponseDto, ValidateResponseDto, TaskResponseDto, SuccessResponseDto, ErrorResponseDto, DynamicAttributesResponse as DynamicAttributesResponse } from './dtos/responses.dto';
+import { BooleanResponseDto, InfoResponseDto, ValidateResponseDto, TaskResponseDto, SuccessResponseDto, ErrorResponseDto, DynamicAttributesResponseDto as DynamicAttributesResponseDto } from './dtos/responses.dto';
 import { ApiExceptionFilter } from './exception.filter';
 import { LanguageEnum } from './enums/language.enum';
-import { hasAdminRights, senderIsHoster } from './auth/auth.interceptors';
+import { senderIsHoster } from './auth/auth.interceptors';
 import { AuthGuard } from './auth/auth.guard';
 import { JwtPayloadRequest } from './dtos/jwt-payload.request';
 
 @Controller()
 @UseFilters(new ApiExceptionFilter())
 @UseGuards(AuthGuard)
-@UseInterceptors(senderIsHoster, hasAdminRights)
+@UseInterceptors(senderIsHoster)
 @ApiBearerAuth("JWT-auth")
 @ApiUnauthorizedResponse({ description: 'Unauthorized' })
 export class AppController {
@@ -471,14 +471,14 @@ export class AppController {
       "Receive the id of the attribute to be returned and the Product Attributes, and send back the addons of the Product.",
   })
   @ApiOkResponse({
-    schema: { oneOf: refs(BooleanResponseDto, DynamicAttributesResponse, ErrorResponseDto) },
+    schema: { oneOf: refs(BooleanResponseDto, DynamicAttributesResponseDto, ErrorResponseDto) },
   })
   @Post("dynamic-product-attribute")
   @HttpCode(200)
   async returnProductAttributes(
     @Request() request: Request & JwtPayloadRequest,
     @Body() requestBody: DynamicProductAttributeRequest
-  ): Promise<DynamicAttributesResponse | BooleanResponseDto | ErrorResponseDto> {
+  ): Promise<DynamicAttributesResponseDto | BooleanResponseDto | ErrorResponseDto> {
     const fieldId: string = requestBody.attributeToBeReturned;
     const item_attributes: Record<string, any> =
       requestBody.product_attributes;
@@ -499,14 +499,14 @@ export class AppController {
       "Receive the id of the addon to be returned and the Product Attributes, and send back the addons of the Product.",
   })
   @ApiOkResponse({
-    schema: { oneOf: refs(BooleanResponseDto, DynamicAttributesResponse, ErrorResponseDto) },
+    schema: { oneOf: refs(BooleanResponseDto, DynamicAttributesResponseDto, ErrorResponseDto) },
   })
   @Post("dynamic-item-attribute")
   @HttpCode(200)
   async returnAttributes(
     @Request() request: Request & JwtPayloadRequest,
     @Body() requestBody: DynamicItemAttributeRequest
-  ): Promise<DynamicAttributesResponse | BooleanResponseDto | ErrorResponseDto> {
+  ): Promise<DynamicAttributesResponseDto | BooleanResponseDto | ErrorResponseDto> {
     const fieldId: string = requestBody.attributeToBeReturned;
     const item_attributes: Record<string, any> =
       requestBody.product_attributes;

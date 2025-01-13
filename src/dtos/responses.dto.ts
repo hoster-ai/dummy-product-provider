@@ -181,7 +181,7 @@ export class BooleanResponseDto extends BaseResponse {
 
 
 
-export class DynamicAttributesResponse {
+export class DynamicAttributesResponseDto extends BaseResponse{
   @ApiProperty({
     type: [FieldDto],
     example: [

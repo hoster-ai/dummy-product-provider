@@ -3,10 +3,7 @@ import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ValidationError } from 'class-validator';
 import { AppModule } from './app.module';
-import { ChargeResponseDto } from './dtos/charge.response.dto';
-import { DynamicPriceInfoDto } from './dtos/provider-info.dto';
-import { ValidateResponseDto, BooleanResponseDto, DynamicAttributesResponse, ErrorResponseDto, InfoResponseDto, SuccessResponseDto, TaskResponseDto,  } from './dtos/responses.dto';
-import { CountryEnum } from './enums/country.enum';
+import { ValidateResponseDto, BooleanResponseDto, DynamicAttributesResponseDto, ErrorResponseDto, InfoResponseDto, SuccessResponseDto, TaskResponseDto, BaseResponse,  } from './dtos/responses.dto';
 import { FieldDto } from './dtos/field.dto';
 
 async function bootstrap() {
@@ -44,12 +41,13 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config, {
     extraModels: [
       FieldDto,
+      BaseResponse,
       TaskResponseDto,
       SuccessResponseDto,
       ErrorResponseDto,
       InfoResponseDto,
-      // ValidateResponseDto,
-      DynamicAttributesResponse,
+      ValidateResponseDto,
+      DynamicAttributesResponseDto,
       BooleanResponseDto,
     ],
   }); // here you can declare any extra models you create and add them to the swagger api
