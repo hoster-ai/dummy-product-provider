@@ -6,7 +6,7 @@ import { DynamicItemAttributeRequest, DynamicProductAttributeRequest, RequestDto
 import { BooleanResponseDto, InfoResponseDto, ValidateResponseDto, TaskResponseDto, SuccessResponseDto, ErrorResponseDto, DynamicAttributesResponseDto as DynamicAttributesResponseDto, StatusResponseDto as SetupStatusResponseDto } from './dtos/responses.dto';
 import { ApiExceptionFilter } from './exception.filter';
 import { LanguageEnum } from './enums/language.enum';
-import { senderIsHoster } from './auth/auth.interceptors';
+import { senderIs } from './auth/auth.interceptors';
 import { AuthGuard } from './auth/auth.guard';
 import { JwtPayloadRequest } from './dtos/jwt-payload.request';
 import { SetupStatusEnum } from './enums/setup-status.enum';
@@ -14,7 +14,7 @@ import { SetupStatusEnum } from './enums/setup-status.enum';
 @Controller()
 @UseFilters(new ApiExceptionFilter())
 @UseGuards(AuthGuard)
-@UseInterceptors(senderIsHoster)
+@UseInterceptors(senderIs)
 @ApiBearerAuth("JWT-auth")
 @ApiUnauthorizedResponse({ description: 'Unauthorized' })
 export class AppController {

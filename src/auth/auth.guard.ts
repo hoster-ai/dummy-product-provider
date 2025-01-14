@@ -23,7 +23,7 @@ import {
           secret: process.env.SERVICE_PROVIDER_TOKEN,
         });
   
-        // Το payload περιέχει user_id, company_id, company_owner: boolean iat(ημερομηνία έκδοσης jwt) exp(ημερομηνία λήξης jwt)
+        // Το payload περιέχει user_id, company_id, sender, acceptedRoles
         request["user"] = payload;
       } catch (err) {
         throw new UnauthorizedException();
