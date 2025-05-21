@@ -10,6 +10,7 @@ import { senderIs } from './auth/auth.interceptors';
 import { AuthGuard } from './auth/auth.guard';
 import { JwtPayloadRequest } from './dtos/jwt-payload.request';
 import { SetupStatusEnum } from './enums/setup-status.enum';
+import { RolesEnum } from './enums/roles.enum';
 
 @Controller()
 @UseFilters(new ApiExceptionFilter())
@@ -610,6 +611,49 @@ export class AppController {
             ? 'Setup failed due to a random error'
             : 'Setup is currently pending',
     };
+  }
+
+  @ApiTags('Provider')
+  @Post(':companyId/quick-setup')
+  @ApiOkResponse()
+  @HttpCode(200)
+  async quickSetup(
+    @Request() request: Request & JwtPayloadRequest,
+    @Body() body: { credentials: any; createProducts: boolean },
+  ): Promise<{ code: number; status: string; message: string }> {
+    const { credentials, createProducts } = body;
+
+    try {
+      // Example: Validate credentials (replace with actual validation logic)
+      if (!credentials || typeof credentials !== 'object') {
+        throw new Error('Invalid credentials');
+      }
+
+      // Example: Perform setup with credentials
+      const setupSuccess = true; // Replace with actual setup logic
+
+      // Example: Create products if requested
+      if (createProducts) {
+        // Replace with actual product creation logic
+        console.log('Creating products...');
+      }
+
+      if (setupSuccess) {
+        return {
+          code: 200,
+          status: 'success',
+          message: 'Quick setup completed successfully',
+        };
+      } else {
+        throw new Error('Setup failed');
+      }
+    } catch (error) {
+      return {
+        code: 400,
+        status: 'failure',
+        message: error.message || 'An error occurred during quick setup',
+      };
+    }
   }
 
 }

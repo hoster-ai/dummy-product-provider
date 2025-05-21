@@ -6,7 +6,7 @@ export class JwtPayloadRequest {
   @IsObject()
   user: {
     user_id?: string;
-    company_id?: string;
+    company_id: string;
     sender: SenderEnum;
     acceptedRoles: RolesEnum[];
   };

@@ -23,7 +23,7 @@ export class UserDataDto {
   @ApiProperty({
     type: String,
     example: '5ce45d7606444f199acfba1e',
-    description: 'ID of the user',
+    description: 'ID of the user making the purchase',
   })
   id: string;
 
@@ -35,9 +35,9 @@ export class UserDataDto {
   @ApiProperty({
     type: String,
     example: '5ce45d7606444f199acfba1e',
-    description: 'Parent ID of the user',
+    description: 'Id of the company making the request',
   })
-  parentId?: string;
+  companyId?: string;
 
   /**
    * Email of the user
@@ -48,7 +48,7 @@ export class UserDataDto {
     type: String,
     title: 'Email',
     example: 'email@example.com',
-    description: 'Email of the user',
+    description: 'Email of the user/invoice recipient',
   })
   email: string;
 
@@ -61,7 +61,7 @@ export class UserDataDto {
     type: String,
     title: 'First Name',
     example: 'Fname',
-    description: 'First name of the user',
+    description: 'First name of the user/invoice recipient',
   })
   firstName: string;
 
@@ -74,7 +74,7 @@ export class UserDataDto {
     type: String,
     title: 'Last Name',
     example: 'Lname',
-    description: 'Last name of the user',
+    description: 'Last name of the user/invoice recipient',
   })
   lastName: string;
 
@@ -88,9 +88,9 @@ export class UserDataDto {
     title: 'Is company',
     example: false,
     default: false,
-    description: 'Indicates if the user is a company',
+    description: 'Indicates if the user/invoice recipient is a company',
   })
-  isCompany?: boolean;
+  isCompany: boolean;
 
   /**
    * Company name of the user
@@ -101,9 +101,9 @@ export class UserDataDto {
   @ApiProperty({
     type: String,
     title: 'Company Name',
-    description: 'Company name of the user',
+    description: 'Company name of the user/invoice recipient',
   })
-  companyName: string;
+  companyName?: string;
 
   /**
    * Telephone number of the user
@@ -116,7 +116,7 @@ export class UserDataDto {
     type: String,
     title: 'Telephone',
     example: '+30.2100000000',
-    description: 'Telephone number of the user',
+    description: 'Telephone number of the user/invoice recipient',
   })
   telephone: string;
 
@@ -129,7 +129,7 @@ export class UserDataDto {
     type: String,
     title: 'Mobile',
     example: '+30.6900000000',
-    description: 'Mobile number of the user',
+    description: 'Mobile number of the user/invoice recipient',
   })
   mobile?: string;
 
@@ -144,7 +144,7 @@ export class UserDataDto {
   @ApiProperty({
     type: String,
     title: 'Address 1',
-    description: 'Address line 1 of the user',
+    description: 'Address line 1 of the user/invoice recipient',
   })
   address1: string;
 
@@ -157,7 +157,7 @@ export class UserDataDto {
   @ApiPropertyOptional({
     type: String,
     title: 'Address 2',
-    description: 'Address line 2 of the user',
+    description: 'Address line 2 of the user/invoice recipient',
   })
   address2?: string;
 
@@ -170,7 +170,7 @@ export class UserDataDto {
   @ApiPropertyOptional({
     type: String,
     title: 'Address 3',
-    description: 'Address line 3 of the user',
+    description: 'Address line 3 of the user/invoice recipient',
   })
   address3?: string;
 
@@ -186,7 +186,7 @@ export class UserDataDto {
     type: String,
     title: 'Postal Code',
     example: '545454',
-    description: 'Postal code of the user',
+    description: 'Postal code of the user/invoice recipient',
   })
   postcode: string;
 
@@ -201,7 +201,7 @@ export class UserDataDto {
   @ApiProperty({
     type: String,
     title: 'City',
-    description: 'City of the user',
+    description: 'City of the user/invoice recipient',
   })
   city: string;
 
@@ -215,7 +215,7 @@ export class UserDataDto {
     enum: CountryEnum,
     title: 'Country Code',
     example: 'GB',
-    description: 'Country code of the user',
+    description: 'Country code of the user/invoice recipient',
   })
   country: CountryEnum;
 
@@ -228,18 +228,7 @@ export class UserDataDto {
   @ApiPropertyOptional({
     type: String,
     title: 'State',
-    description: 'State of the user',
+    description: 'State of the user/invoice recipient',
   })
   state?: string;
-
-  /**
-   * Currency of the user
-   */
-  @IsOptional()
-  @MaxLength(3)
-  @ApiPropertyOptional({
-    type: String,
-    description: 'Currency of the user',
-  })
-  currency?: string;
 }

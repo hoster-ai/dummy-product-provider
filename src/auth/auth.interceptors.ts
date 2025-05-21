@@ -1,12 +1,6 @@
-import {
-    Injectable,
-    NestInterceptor,
-    ExecutionContext,
-    CallHandler,
-    ForbiddenException,
-  } from "@nestjs/common";
-  import { Observable } from "rxjs";
-  import { JwtPayloadRequest } from "src/dtos/jwt-payload.request";
+import { Injectable, NestInterceptor, ExecutionContext, CallHandler, ForbiddenException, } from "@nestjs/common";
+import { Observable } from "rxjs";
+import { JwtPayloadRequest } from "src/dtos/jwt-payload.request";
 import { SenderEnum } from "src/enums/sender.enum";
 
 @Injectable()
@@ -47,19 +41,3 @@ export class senderIs implements NestInterceptor {
     throw new ForbiddenException('Invalid sender. Access is denied.');
   }
 }
-  
-  // @Injectable()
-  // export class hasAdminRights implements NestInterceptor {
-  //   //check the access level of the sender
-  //   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
-  //     const request: Request & JwtPayloadRequest = context
-  //       .switchToHttp()
-  //       .getRequest();
-  
-  //     if (!request.user.admin_rights) {
-  //       throw new ForbiddenException("Forbidden");
-  //     }
-  
-  //     return next.handle();
-  //   }
-  // }
